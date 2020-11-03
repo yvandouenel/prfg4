@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exo js 11 - Convert</title>
+</head>
+<body>
+  <p>Créer un formulaire qui a 2 champs : 
+    - label euro
+    - label dollar
+    Quand vous entrez une valeur dans euro et que vous cliquez
+    sur le bouton "convertir", la valeur en dolla apparaît dans 
+    l'input correspondant au label dollar
+    Ensuite vous faites en sorte que l'inverse soit vrai
+    1 dollar américain = 0,86 Euro</p>
+    <form id="form-convert">
+        <input type="number" step="0.01" min="0" name="" id="euro"><label for="euro">euro</label><br>
+        <input type="number" step="0.01" min="0" name="" id="dollar"><label for="dollar">dollar</label><br>
+        <input type="submit" value="Convertir" id="submit">
+    </form>
+    <script src="../../js/exojs11.js"></script>
+</body>
+</html>
