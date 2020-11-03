@@ -1,0 +1,75 @@
+@import "variables";
+@import "global";
+@media screen and (min-width: $sm) and (max-width: $xl) {
+  
+}
+/* Header */
+header{
+  nav button {
+    @extend %green_button;
+    margin-top: 10px;
+    padding: 10px 15px;
+    &:hover {
+      cursor: pointer;
+     }
+  }
+  ul {
+    display: flex;
+    justify-content: center;
+  
+    >li a {
+      padding: 10px 20px;
+      display: block;
+      background-color: $grey;
+      color: white;
+      border-radius: 6px;
+      margin: 10px 20px;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+} 
+/* main */
+main {
+  @media screen and (max-width: 980px) {
+    overflow-x: scroll;
+  }
+  #wrapper-cols {
+    display: flex;
+    justify-content: space-between;
+  
+    @media screen and (max-width: 980px) {
+      width: 400vw !important;
+    }
+    >section {
+      flex-basis: 23.5%;
+    
+      >header {
+        display: flex;
+    
+        button {
+         @extend %green_button;
+         &:hover {
+          cursor: pointer;
+         }
+        }
+      }
+    }
+  }
+}
+/* footer */
+footer {
+  background-color: $grey;
+  color: white;
+  text-align: center;
+  padding: 30px 0;
+  a {
+    text-decoration: none;
+    color: white;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

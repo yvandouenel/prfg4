@@ -1,0 +1,15 @@
+/* Mixin */
+@mixin border($color, $width) {
+  border: $width solid $color;
+}
+
+/* variable */
+$primary_color: pink;
+/* Héritage */
+%button {
+  @include border(purple, 3px);
+  border-radius: 8px;
+  padding: 10px;
+  background-color: $primary_color;
+  color: black;
+}

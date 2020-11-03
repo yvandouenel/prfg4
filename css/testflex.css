@@ -1,0 +1,17 @@
+div#container {
+  border: 1px solid red;
+  display: flex;
+  /* Axe principal */
+  /* flex-direction: row; */
+  height: 600px;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: stretch;
+  align-content: space-around;
+}
+div#container > div {
+  border: 1px solid black;
+  flex-basis: 30%;
+  padding: 20px;
+}
+

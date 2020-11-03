@@ -1,0 +1,45 @@
+/* global */
+img {
+  max-width: 100%;
+}
+/* Icons */
+.demo-icon {
+  &:hover {
+    cursor: pointer;
+    color: theme-color(secondary);
+  }
+}
+/* Première ligne */
+.first-row {
+  margin-top: 10px;
+  .nav-commodity {
+    ul {
+      display: flex;
+      
+      flex-direction: row-reverse;
+      li {
+        &#top-icon-bell {
+          order: 1;
+        }
+        a {
+          display: block;
+          border: 1px solid theme-color(secondary);
+          padding: 5px;
+          color: theme-color(secondary);
+          text-transform: uppercase;
+          &:before {
+            color: theme-color(primary);
+          }
+          &:hover {
+            text-decoration: none;
+            background-color: theme-color(secondary);
+            color: white;
+            &:before {
+              color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+@charset "UTF-8";
+/* Mixin */
+/* variable */
+/* Héritage */
+body header ul li a {
+  border: 3px solid purple;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: pink;
+  color: black; }
+
+body header {
+  border: 30px solid pink; }
+  body header ul {
+    list-style: none; }
+    body header ul li {
+      margin: 30px 0; }
+      body header ul li a:hover {
+        color: black; }
+  @media screen and (min-width: 1200px) {
+    body header {
+      border: 10px solid blue; } }
+
+/*# sourceMappingURL=testsass.css.map */

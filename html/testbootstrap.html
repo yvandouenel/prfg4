@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yvan test bootstrap</title>
+    <!-- Chargement de la feuille de style bootstrap -->
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="../bootstrap/js/bootstrap.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Button to Open the Modal -->
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-toggle="modal"
+        data-target="#myModal"
+      >
+        Open modal
+      </button>
+
+      <!-- The Modal -->
+      <div class="modal" id="myModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Titre de ma modal</h4>
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">Corps de la modale</div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                Fermer
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <button class="btn btn-secondary">Test boutton</button>
+      <div class="d-flex align-items-center justify-content-between">
+        <h1 class="h4">Titre niveau 1</h1>
+        <h2 class="h1">Titre niveau 2</h2>
+        <h3>Titre niveau 3</h3>
+      </div>
+      <q>Ceci est une citation courte</q>
+      <blockquote class="text-warning bg-dark p-4">
+        Lorem <strong>strong</strong> ipsum dolor sit amet consectetur
+        adipisicing elit. Debitis, doloribus quo. Fugit obcaecati dignissimos,
+        tenetur velit nesciunt excepturi vitae id soluta facere minus accusamus
+        eius itaque esse magnam dolores sed.
+      </blockquote>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-lg-1 col-md-3">Colonne</div>
+        <div class="col-12 col-lg-1 col-md-3">Colonne</div>
+        <div class="col-12 col-lg-1 col-md-3">Colonne</div>
+        <div class="col-12 col-lg-1 col-md-3">Colonne</div>
+        <div class="col-12 col-lg-1 col-md-3">Colonne</div>
+        <div class="col-12 col-lg-1 col-md-3">Colonne</div>
+        <div class="col-12 col-lg-1 col-md-3">Colonne</div>
+        <div class="col-12 col-lg-1 col-md-3">Colonne</div>
+        <div class="col-12 col-lg-1 col-md-3">Colonne</div>
+        <div class="col-12 col-lg-1 col-md-3">Colonne</div>
+        <div class="col-12 col-lg-1 col-md-3">Colonne</div>
+        <div class="col-12 col-lg-1 col-md-3">Colonne</div>
+      </div>
+    </div>
+  </body>
+</html>

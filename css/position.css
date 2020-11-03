@@ -1,0 +1,31 @@
+#img-legend {
+  position: relative;
+  display: table;
+  margin: 0;
+  padding: 0;
+}
+
+#img-legend > div {
+  position: absolute;
+  bottom: 5px;
+  margin: 0;
+  left: 0;
+  width: 90%;
+  padding: 20px 5% 20px 5%;
+  color: white;
+  background-color: rgba(0,0,0,0.5);
+  text-align: center;
+}
+#test {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  padding: 0;
+  
+}
+#testrelatif {
+  position: relative;
+  border: 1px solid red;
+  height: 400px;
+}
