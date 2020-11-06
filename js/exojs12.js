@@ -3,11 +3,11 @@
   class Slideshow {
     constructor(nb_images = 0, width, height, speed) {
       console.log('Dans le constructeur');
-      this.nb_images = nb_images;
-      this.images = [];
-      this.width = width;
-      this.height = height;
-      this.speed = speed;
+        this.nb_images = nb_images;
+        this.images = [];
+        this.width = width;
+        this.height = height;
+        this.speed = speed;
       this.count = 0;
 
       // remplissage des images
@@ -63,7 +63,6 @@
       // création d'une image
       const img = document.createElement("img");
       img.setAttribute("src",`https://picsum.photos/${this.width}/${this.height}?id=${Math.random()*1000}`);
-  
       return img;
     }
   }
@@ -120,7 +119,7 @@ class Slideshow {
       } 
       console.log('images', this.images[0]);
     }
-    createImage = function(src) {
+    createImage = function() {
       // création d'une image
       const img = document.createElement("img");
       img.setAttribute("src", `https://picsum.photos/${this.width}/${this.height}?id=` + (Math.random()*1000));
