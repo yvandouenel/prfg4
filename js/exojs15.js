@@ -23,8 +23,9 @@ async function getTokenUserTerms() {
     // Affichage des termes dans une boule for of
     for (let term of terms) {
       const t = new Term(term.id, term.pid, term.name);
-      t.render();
     }
+    /* const cards = await coop.getCards(user, token);
+    console.log('cards : ', cards); */
   }
   catch (error) {
     console.log('Erreur : ', error);

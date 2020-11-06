@@ -77,4 +77,34 @@ export default class Coopernet {
       })
       .catch(error => { console.error("Erreur attrapée dans getTerms", error); });
   };
+  getCards = (user, token, term_number = 858) => {
+    return fetch(this.url +
+      "/memo/list_cartes_term/" +
+      user.userid +
+      "/" +
+      term_number +
+      "&_format=json&time=" +
+      Math.floor(Math.random() * 10000), {
+      credentials: "same-origin",
+      method: "GET",
+      headers: {
+        "Content-Type": "application/hal+json",
+        "X-CSRF-Token": token,
+        "Authorization": "Basic " + btoa(user.userid + ":" + user.userpwd) // btoa = encodage en base 64
+      }
+    })
+    .then(response => {
+      if (response.status === 200) return response.json(); // vérifie que le format json
+      else throw new Error("Problème de réponse ", response);
+    })
+    .then(data => {
+      console.log("data reçues dans getTerms :", data);
+      if (data) {
+        return data;
+      } else {
+        throw new Error("Problème de data ", data);
+      }
+    })
+    .catch(error => { console.error("Erreur attrapée dans getTerms", error); });;
+  }
 }
