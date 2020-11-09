@@ -1,5 +1,8 @@
-export default class Term {
-  constructor(id, pid, name) {
+import DomElements from "./DomElements.js";
+
+export default class Term extends DomElements {
+  constructor(id, pid, name, success) {
+    super();
     this.id = id;
     this.pid = pid;
     this.name = name;
@@ -7,30 +10,17 @@ export default class Term {
     this.dom_btn = this.render();
 
     // gestion des événements
-    this.manageEvents();
+    this.manageEvents(success);
 
   }
-  manageEvents = () => {
+  manageEvents = (success) => {
     this.dom_btn.onclick = () => {
       console.log('Bouton cliqué : ' + this.name);
+      success(this.id);
     }
   }
   render = () => {
     // Création et affichage des éléments du DOM
     return this.createCustomElement("button", document.body, this.name, {id: this.id});
-  }
-  createCustomElement = function(tagname, tagparent, tagtext = "", tagattributes = {}) {
-    // création d'un élément du dom
-    const elt = document.createElement(tagname);
-    // insertion de elt comme dernier fils de tagparent
-    tagparent.appendChild(elt);
-    if(tagtext != "") {
-      elt.textContent = tagtext;
-    }
-    
-    for(let key in tagattributes) {
-      elt.setAttribute(key, tagattributes[key]);
-    }
-    return elt;
   }
 }
