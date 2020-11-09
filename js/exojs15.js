@@ -12,6 +12,14 @@ class Table extends DomElements {
 
     // Appel de getTokenUserTerms 
     this.getTokenUserTerms();
+
+    // Affichage du tableau
+    this.render();
+  }
+  render = () => {
+    // Création du header dans lequel on trouvera les termes cliquables
+
+    // Création du main dans lequel on trouvera les colonnes et les cartes
   }
   getTokenUserTerms = async () => {
     try {
