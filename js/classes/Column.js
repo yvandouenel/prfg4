@@ -2,13 +2,13 @@ import Card from "./Card.js";
 import DomElements from "./DomElements.js";
 
 export default class Column extends DomElements{
-  constructor(cards, title) {
+  constructor(cards, title, dom_main) {
     super();
     this.cards = cards;
     this.title = title;
 
     // affichage de la colonne courante
-    this.dom_section = this.render();
+    this.dom_section = this.render(dom_main);
 
     // Création des cartes
     this.createCards();
@@ -20,9 +20,9 @@ export default class Column extends DomElements{
     }
 
   }
-  render = () => {
+  render = (dom_main) => {
     console.log('Dans render de Column');
-    const section =  this.createCustomElement("section", document.body);
+    const section =  this.createCustomElement("section", dom_main);
     const title = this.createCustomElement("h3", section, this.title)
 
     return section;

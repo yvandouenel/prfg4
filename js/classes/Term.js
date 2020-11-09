@@ -1,13 +1,13 @@
 import DomElements from "./DomElements.js";
 
 export default class Term extends DomElements {
-  constructor(id, pid, name, success) {
+  constructor(id, pid, name, success, dom_header) {
     super();
     this.id = id;
     this.pid = pid;
     this.name = name;
     // affichage du term sous forme de bouton et récupération des éléments du dom
-    this.dom_btn = this.render();
+    this.dom_btn = this.render(dom_header);
 
     // gestion des événements
     this.manageEvents(success);
@@ -19,8 +19,8 @@ export default class Term extends DomElements {
       success(this.id);
     }
   }
-  render = () => {
+  render = (dom_header) => {
     // Création et affichage des éléments du DOM
-    return this.createCustomElement("button", document.body, this.name, {id: this.id});
+    return this.createCustomElement("button", dom_header, this.name, {id: this.id});
   }
 }
