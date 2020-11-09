@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Coopernet from '../services/Coopernet';
+import Column from './Column';  
+
 
 class Table extends Component {
   constructor() {
@@ -12,7 +14,8 @@ class Table extends Component {
     // il faut passer par la méthode setState qui compare deux objets et recrée l'interface
     // via la méthode render
     this.state = {
-      terms: []
+      terms: [],
+      columns: []
     }
   }
   componentDidMount() {
@@ -39,7 +42,7 @@ class Table extends Component {
       // -- On fait une copie du state
       // -- On modifie la copie du state 
       // -- Enfin, on compare avec la méthode setState et s'il y a une différence entre la copie et le state, alors Render est automatiquement appelée
-      const state_copy = { ... this.state.terms};
+      const state_copy = { ...this.state.terms};
       state_copy.terms = terms;
       this.setState(state_copy);
 
@@ -54,13 +57,13 @@ class Table extends Component {
         <header>
           Logo
           <nav>
-            <ul>
-              {this.state.terms.map(elt => <li key={elt.id}>{elt.name}</li>)}
+            <ul className="list-unstyled d-flex justify-content-center">
+              {this.state.terms.map(elt => <li className="btn btn-warning m-2" key={elt.id}>{elt.name}</li>)}
             </ul>
           </nav>
         </header>
         <main>
-          Les colonnes et les cartes
+          {this.state.columns.map(col => <Column />)}
         </main>
         <footer>
           Footer ici
