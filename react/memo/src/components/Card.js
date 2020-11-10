@@ -1,17 +1,15 @@
-import React, { Component } from 'react';
+/**
+ * Stateless component : une simple fonction (attention, on utilise plus le "this")
+ * @param {} props 
+ */
+function Card(props) {
+  return (
+    <article className="bg-secondary p-3 text-white mb-3 rounded">
+     <h4>{props.card.question}</h4>
+     <h3>{props.card.reponse}</h3>
+     <p>{props.card.explication}</p>
+    </article>
 
-class Card extends Component {
-  state = {  }
-  render() {
-    return (
-      <article>
-       <h4>{this.props.card.question}</h4>
-       <h3>{this.props.card.reponse}</h3>
-       <p>{this.props.card.explication}</p>
-      </article>
-
-    );
-  }
+  );
 }
-
 export default Card;
