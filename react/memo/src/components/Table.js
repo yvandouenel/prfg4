@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Coopernet from '../services/Coopernet';
 import Column from './Column';
+import FormLogin from './FormLogin';
 
 
 class Table extends Component {
@@ -17,7 +18,8 @@ class Table extends Component {
       terms: [],
       columns: [],
       term_selected: null,
-      user: null
+      user: null,
+      error: null
     }
   }
   componentDidMount() {
@@ -41,7 +43,8 @@ class Table extends Component {
 
       // Récupération du n° de user dans la base de données de coopernet
       this.state.user = await this.coop.getUser(login, pwd, this.token);
-      console.log('user : ', this.state.user);
+      if(!this.state.user) throw new Error("Erreur de login ");
+      console.log('user ici : ', this.state.user);
 
       // Récupération des rubriques (terms ex : HTML) 
       const terms = await this.coop.getTerms(this.state.user, this.token);
@@ -54,11 +57,17 @@ class Table extends Component {
       // -- Enfin, on compare avec la méthode setState et s'il y a une différence entre la copie et le state, alors Render est automatiquement appelée
       const state_copy = { ...this.state.terms };
       state_copy.terms = terms;
+      state_copy.error = null;
       this.setState(state_copy);
 
     }
     catch (error) {
-      console.log('Erreur : ', error);
+      console.log('Erreur ici : ', error);
+      console.log('this : ', this);
+      // Pour afficher l'erreur, il va falloir modifier le state avec la procédure habituelle
+      const state = { ...this.state };
+      state.error = error;
+      this.setState(state);
     }
   }
   handleClickTerm = async term => {
@@ -144,20 +153,11 @@ class Table extends Component {
         <main className="container-fluid">
           <section className="row">
             <div className="col">
+              {this.state.error && (
+                <h2 className="alert">{this.state.error.message}</h2>
+              )}
               {!this.state.user && (
-                <form onSubmit={this.handleSubmitLoginForm}>
-                  <label>
-                    Login :
-                  <input type="text" id="login" />
-                  </label>
-                  <br />
-                  <label>
-                    Mot de passe :
-                  <input type="password" id="pwd" />
-                  </label>
-                  <br />
-                  <input type="submit" value="Envoyer" />
-                </form>
+                <FormLogin onSubmitLoginForm={this.handleSubmitLoginForm} />
               )}
 
             </div>

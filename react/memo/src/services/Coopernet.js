@@ -34,7 +34,7 @@ export default class Coopernet {
       .then(data => {
         //console.log("success", data);
         if (data.current_user === undefined) {
-          console.log("Erreur de login");
+          
           throw new Error("Erreur de data : ", data);
         } else {
           //console.log("user", data.current_user);
@@ -46,7 +46,7 @@ export default class Coopernet {
 
         }
       })
-      .catch(error => { console.error("Erreur attrapée dans getUser", error) });
+      .catch(error => { console.error("Erreur attrapée dans getUser de Coopernet", error) });
 
   };
 
