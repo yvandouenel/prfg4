@@ -77,7 +77,7 @@ export default class Coopernet {
       })
       .catch(error => { console.error("Erreur attrapée dans getTerms", error); });
   };
-  getCards = (user, token, term_number) => {
+  getCards = (user, token, term_number  ) => {
     return fetch(this.url +
       "/memo/list_cartes_term/" +
       user.userid +
