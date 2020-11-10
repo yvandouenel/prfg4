@@ -154,10 +154,12 @@ class Table extends Component {
           <section className="row">
             <div className="col">
               {this.state.error && (
-                <h2 className="alert">{this.state.error.message}</h2>
+                <h2 className="alert alert-warning">{this.state.error.message}</h2>
               )}
               {!this.state.user && (
-                <FormLogin onSubmitLoginForm={this.handleSubmitLoginForm} />
+                <div className="d-flex justify-content-center">
+                  <FormLogin onSubmitLoginForm={this.handleSubmitLoginForm} />
+                </div>
               )}
 
             </div>
