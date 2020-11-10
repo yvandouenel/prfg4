@@ -90,6 +90,20 @@ class Table extends Component {
     this.getUserTerms(login, pwd);
 
   }
+  handleClickLogout = () => {
+    console.log('Dans handleClickLogout');
+    // Pour changer l'interface (ici l'utilisateur), il faut :
+    // - Copier le state - ici, le remettre à son état original
+    // - Comparer le state copié et le state encours via setState(copie-du-state)
+    const state_original = {
+      terms: [],
+      columns: [],
+      term_selected: null,
+      user: null
+    }
+    this.setState(state_original);
+
+  }
   render() {
     return (
       <div>
@@ -101,7 +115,11 @@ class Table extends Component {
               </a>e<span id="m-memo">M</span>o
           </h1>
             {this.state.user && (
-              <button className="btn btn-danger ml-5">Déconnexion</button>
+              <button 
+              onClick={this.handleClickLogout}
+              className="btn btn-danger ml-5"
+              >Déconnexion
+              </button>
             )}
           </div>
 
