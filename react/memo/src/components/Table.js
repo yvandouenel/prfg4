@@ -70,6 +70,33 @@ class Table extends Component {
       this.setState(state);
     }
   }
+  handleClickCardRight = (col_index, card_index) => {
+    console.log('Dans handleClickRight ');
+    console.log('col_index : ', col_index);
+    console.log('card_index : ', card_index);
+    
+    // Pour changer l'interface (ici les colonnes et les cartes), il faut :
+    // - Copier le state
+    // - Modifier la copie du state (ici columns)
+    // - Comparer le state copié et le state encours via setState(copie-du-state)
+    const state_copy = { ...this.state };
+
+    // calcul de la colonne de droite via "%" qui est l'opérateur du reste de la division euclidienne
+    const next_col = ((col_index + 1) % 4);
+    
+    console.log('Next col : ', next_col);
+    
+
+    // on ajoute la carte cliquée dans la prochaine colonne
+    state_copy.columns[next_col].cartes.push(state_copy.columns[col_index].cartes[card_index]);
+
+    // on supprime la carte cliquée du state copié
+    state_copy.columns[col_index].cartes.splice(card_index, 1);
+
+    // on compare le state actuel au state copié
+    this.setState(state_copy); 
+
+  }
   handleClickTerm = async term => {
     console.log('Dans handleClickTerm - id du terme cliqué : ', term.id);
     // Je peux aller chercher les colonnes et les cartes qui concernent ce terme
@@ -165,7 +192,13 @@ class Table extends Component {
             </div>
           </section>
           <section className="row">
-            {this.state.columns.map(col => <Column key={col.id} col_name={col.name} cards={col.cartes} />)}
+            {this.state.columns.map((col, index) => 
+            <Column key={col.id} 
+              col_name={col.name} 
+              cards={col.cartes} 
+              onClickCardRight={this.handleClickCardRight}
+              col_index={index}
+            />)}
           </section>
 
         </main>
