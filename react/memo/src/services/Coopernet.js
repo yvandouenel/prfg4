@@ -115,7 +115,7 @@ export default class Coopernet {
   ) => {
     console.log("Dans updateCard de coopernet");
     // création de la requête avec fetch
-    fetch(this.url + "/node/" + card.id + "?_format=hal_json", {
+    return fetch(this.url + "/node/" + card.id + "?_format=hal_json", {
       // permet d'accepter les cookies ?
       credentials: "same-origin",
       method: "PATCH",
@@ -169,9 +169,14 @@ export default class Coopernet {
         ]
       })
     })
-      .then(response => response.json())
+      .then(response => {
+        console.log('statut de la réponse ', response.status);
+        if(response.status == 403) throw new Error("Problème pour enregistrer la carte")
+        return response.json();
+      })
       .then(data => {
         console.log("data reçues :", data);
+       
         if (data) {
           return data;
         } else {
