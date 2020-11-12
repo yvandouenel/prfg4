@@ -8,7 +8,7 @@ function Column(props) {
       <Card 
         key={card.id} 
         card={card} 
-        onClickCardRight={props.onClickCardRight}
+        onClickCardMove={props.onClickCardMove}
         col_index={props.col_index}
         card_index={index}
       />)}

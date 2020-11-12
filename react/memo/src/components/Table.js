@@ -35,7 +35,11 @@ class Table extends Component {
       console.log('token : ', this.token);
     }
     catch (error) {
-      console.log('Erreur : ', error);
+      console.log('Erreur de token dans getToken de Table : ', error);
+      // On modifie l'interface via la méthode habituelle
+      const state_copy = { ...this.state };
+      state_copy.error = error;
+      this.setState(state_copy);
     }
   }
   getUserTerms = async (login, pwd) => {
@@ -43,7 +47,7 @@ class Table extends Component {
 
       // Récupération du n° de user dans la base de données de coopernet
       this.state.user = await this.coop.getUser(login, pwd, this.token);
-      if(!this.state.user) throw new Error("Erreur de login ");
+      if (!this.state.user) throw new Error("Erreur de login ");
       console.log('user ici : ', this.state.user);
 
       // Récupération des rubriques (terms ex : HTML) 
@@ -70,31 +74,40 @@ class Table extends Component {
       this.setState(state);
     }
   }
-  handleClickCardRight = (col_index, card_index) => {
+ 
+  handleClickCardMove = (col_index, card_index, direction) => {
     console.log('Dans handleClickRight ');
     console.log('col_index : ', col_index);
     console.log('card_index : ', card_index);
-    
+
     // Pour changer l'interface (ici les colonnes et les cartes), il faut :
     // - Copier le state
     // - Modifier la copie du state (ici columns)
     // - Comparer le state copié et le state encours via setState(copie-du-state)
     const state_copy = { ...this.state };
 
-    // calcul de la colonne de droite via "%" qui est l'opérateur du reste de la division euclidienne
-    const next_col = ((col_index + 1) % 4);
-    
-    console.log('Next col : ', next_col);
-    
+    if (direction === "right") {
+      // calcul de la colonne de droite via "%" qui est l'opérateur du reste de la division euclidienne
+      const next_col = ((col_index + 1) % 4);
+      console.log('Next col : ', next_col);
+      // on ajoute la carte cliquée dans la prochaine colonne
+      state_copy.columns[next_col].cartes.push(state_copy.columns[col_index].cartes[card_index]);
 
-    // on ajoute la carte cliquée dans la prochaine colonne
-    state_copy.columns[next_col].cartes.push(state_copy.columns[col_index].cartes[card_index]);
-
-    // on supprime la carte cliquée du state copié
-    state_copy.columns[col_index].cartes.splice(card_index, 1);
+      // on supprime la carte cliquée du state copié
+      state_copy.columns[col_index].cartes.splice(card_index, 1);
+    } else {
+      // calcul de la colonne de gauche via "%" qui est l'opérateur du reste de la division euclidienne
+      let previous_col = ((col_index - 1) % 4);
+      if(previous_col == -1) previous_col = 3;
+      console.log('Previous col : ', previous_col);
+      // on ajoute la carte cliquée dans la colonne précédente
+      state_copy.columns[previous_col].cartes.push(state_copy.columns[col_index].cartes[card_index]);
+      // on supprime la carte cliquée du state copié
+      state_copy.columns[col_index].cartes.splice(card_index, 1);
+    }
 
     // on compare le state actuel au state copié
-    this.setState(state_copy); 
+    this.setState(state_copy);
 
   }
   handleClickTerm = async term => {
@@ -151,9 +164,9 @@ class Table extends Component {
               </a>e<span id="m-memo">M</span>o
           </h1>
             {this.state.user && (
-              <button 
-              onClick={this.handleClickLogout}
-              className="btn btn-danger ml-5"
+              <button
+                onClick={this.handleClickLogout}
+                className="btn btn-danger ml-5"
               >Déconnexion
               </button>
             )}
@@ -181,7 +194,7 @@ class Table extends Component {
           <section className="row">
             <div className="col">
               {this.state.error && (
-                <h2 className="alert alert-warning">{this.state.error.message}</h2>
+                <h2 className="alert alert-warning">Erreur : {this.state.error.message} - Merci de contacter le développeur : bob@devel.org</h2>
               )}
               {!this.state.user && (
                 <div className="d-flex justify-content-center">
@@ -192,13 +205,13 @@ class Table extends Component {
             </div>
           </section>
           <section className="row">
-            {this.state.columns.map((col, index) => 
-            <Column key={col.id} 
-              col_name={col.name} 
-              cards={col.cartes} 
-              onClickCardRight={this.handleClickCardRight}
-              col_index={index}
-            />)}
+            {this.state.columns.map((col, index) =>
+              <Column key={col.id}
+                col_name={col.name}
+                cards={col.cartes}
+                onClickCardMove={this.handleClickCardMove}
+                col_index={index}
+              />)}
           </section>
 
         </main>

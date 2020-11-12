@@ -11,8 +11,7 @@ export default class Coopernet {
       })
       .then(function (data) { // data correspond au retour du résolve (ici deux lignes au dessus)
         return data;
-      })
-      .catch(error => { console.log("Erreur attrapée : ", error) });
+      });
   }
 
   getUser = (login, pwd, token) => {
@@ -107,4 +106,75 @@ export default class Coopernet {
     })
     .catch(error => { console.error("Erreur attrapée dans getTerms", error); });;
   }
+  updateCard = (
+    card,
+    themeid,
+    columnid,
+  ) => {
+    console.log("Dans updateCard de coopernet");
+    // création de la requête avec fetch
+    fetch(this.url + "node/" + card.id + "?_format=hal_json", {
+      // permet d'accepter les cookies ?
+      credentials: "same-origin",
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/hal+json",
+        "X-CSRF-Token": this.token,
+        Authorization: "Basic " + btoa(this.user.uname + ":" + this.user.upwd) // btoa = encodage en base 64
+      },
+      body: JSON.stringify({
+        _links: {
+          type: {
+            href: this.url_server + "rest/type/node/carte"
+          }
+        },
+        title: [
+          {
+            value: card.question
+          }
+        ],
+        field_carte_question: [
+          {
+            value: card.question
+          }
+        ],
+        field_carte_reponse: [
+          {
+            value: card.reponse
+          }
+        ],
+        field_carte_explication: [
+          {
+            value: card.explication
+          }
+        ],
+        field_carte_colonne: [
+          {
+            target_id: columnid,
+            url: "/taxonomy/term/" + columnid
+          }
+        ],
+        field_carte_thematique: [
+          {
+            target_id: themeid,
+            url: "/taxonomy/term/" + themeid
+          }
+        ],
+        type: [
+          {
+            target_id: "carte"
+          }
+        ]
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log("data reçues :", data);
+        if (data) {
+          return data;
+        } else {
+          throw new Error("Problème de donnée", data);
+        }
+      });
+  };
 }
