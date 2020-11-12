@@ -5,7 +5,9 @@ function Column(props) {
     <section className="col">
       <div className="d-flex mb-3">
         <button 
-          onClick={props.onClickButtonAddCard}
+          onClick={()=> {
+            props.onClickButtonAddCard(props.col_id, props.col_index)
+          }}
           className="btn btn-success mr-2">
           +
         </button>

@@ -22,7 +22,7 @@ class Table extends Component {
       term_selected: null,
       user: null,
       error: null,
-      show_add_card: false
+      show_add_card: null
     }
   }
   componentDidMount() {
@@ -82,9 +82,10 @@ class Table extends Component {
       this.setState(state);
     }
   }
-  handleSubmitAddCard = (event) => {
+  handleSubmitAddCard = (event, column) => {
     console.log('Dans handleSubmitAddCard');
     event.preventDefault();
+    console.log('Info sur la colonne (index et id ) :', column);
 
     // Récupération des inputs du formulaire
     // event.target représente ici le formulaire
@@ -94,20 +95,28 @@ class Table extends Component {
 
     console.log('Valeurs entrées : ', question, answer, explanation);
 
-    if(question && answer) {
+    if (question && answer) {
       // On va modifier l'interface via le processus habituel
       const state_copy = { ...this.state };
-      //this.state.copy.columns[???].push({colonne:???, explication: ???, question: ???, reponse: ???});
+      state_copy.columns[column.col_index].cartes.push(
+        {
+          id: "tmp_" + (Math.random() * 1000),
+          colonne: column.col_id,
+          explication: explanation,
+          question: question,
+          reponse: answer
+        });
+        state_copy.show_add_card = null;
+      this.setState(state_copy);
     }
-
   }
-  handleClickButtonAddCard = () => {
+  handleClickButtonAddCard = (col_id, col_index) => {
     console.log('Dans handleClickButtonAddCard');
     // Affichage du formulaire d'ajout de carte
 
     // Changement du state pour que le formulaire d'ajout soit visible
     const state_copy = { ...this.state };
-    state_copy.show_add_card = true;
+    state_copy.show_add_card = { col_id: col_id, col_index: col_index };
     this.setState(state_copy);
 
   }
@@ -154,10 +163,10 @@ class Table extends Component {
     try {
       console.log('Dans updateCard - carte bougée : ', card);
       await this.coop.updateCard(
-        this.state.user, 
-        this.token, 
-        card, 
-        this.state.term_selected.id, 
+        this.state.user,
+        this.token,
+        card,
+        this.state.term_selected.id,
         card.colonne);
     }
     catch (error) {
@@ -283,13 +292,14 @@ class Table extends Component {
           </section>
           <section className="row">
             {this.state.columns.map((col, index) =>
-              <Column 
+              <Column
                 key={col.id}
                 col_name={col.name}
                 cards={col.cartes}
                 onClickCardMove={this.handleClickCardMove}
                 onClickButtonAddCard={this.handleClickButtonAddCard}
                 col_index={index}
+                col_id={col.id}
               />)}
           </section>
 
@@ -298,8 +308,9 @@ class Table extends Component {
           Footer ici
         </footer>
         {this.state.show_add_card && (
-          <AddCard 
+          <AddCard
             onSubmitAddCard={this.handleSubmitAddCard}
+            column={this.state.show_add_card}
           />
         )}
       </div>

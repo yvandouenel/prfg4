@@ -7,7 +7,7 @@ class AddCard extends Component {
     return (
       <section id="form-add-card">
         <form 
-          onSubmit={this.props.onSubmitAddCard}
+          onSubmit={(event) => {this.props.onSubmitAddCard(event,this.props.column)}}
         >
           <label htmlFor="question">Question</label>
           <input type="text" id="question" /><br/>
