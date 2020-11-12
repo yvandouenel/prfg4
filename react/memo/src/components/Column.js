@@ -3,7 +3,14 @@ import Card from './Card';
 function Column(props) {
   return (
     <section className="col">
-      <h3>{props.col_name}</h3>
+      <div className="d-flex mb-3">
+        <button 
+          onClick={props.onClickButtonAddCard}
+          className="btn btn-success mr-2">
+          +
+        </button>
+        <h3>{props.col_name}</h3>
+      </div>
       {props.cards.map((card, index) => 
       <Card 
         key={card.id} 

@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import Coopernet from '../services/Coopernet';
 import Column from './Column';
 import FormLogin from './FormLogin';
+import AddCard from './AddCard';
 
 
 class Table extends Component {
   constructor() {
     super();
     this.coop = new Coopernet("https://www.coopernet.fr");
+    //this.coop = new Coopernet("http://local.coopernet.my");
     this.token = null;
 
     // La proprité state est un objet qui stocke toutes les infos minimum et nécessaires à la 
@@ -19,7 +21,8 @@ class Table extends Component {
       columns: [],
       term_selected: null,
       user: null,
-      error: null
+      error: null,
+      show_add_card: false
     }
   }
   componentDidMount() {
@@ -79,7 +82,35 @@ class Table extends Component {
       this.setState(state);
     }
   }
+  handleSubmitAddCard = (event) => {
+    console.log('Dans handleSubmitAddCard');
+    event.preventDefault();
 
+    // Récupération des inputs du formulaire
+    // event.target représente ici le formulaire
+    const question = event.target.querySelector("#question").value;
+    const answer = event.target.querySelector("#answer").value;
+    const explanation = event.target.querySelector("#explanation").value;
+
+    console.log('Valeurs entrées : ', question, answer, explanation);
+
+    if(question && answer) {
+      // On va modifier l'interface via le processus habituel
+      const state_copy = { ...this.state };
+      //this.state.copy.columns[???].push({colonne:???, explication: ???, question: ???, reponse: ???});
+    }
+
+  }
+  handleClickButtonAddCard = () => {
+    console.log('Dans handleClickButtonAddCard');
+    // Affichage du formulaire d'ajout de carte
+
+    // Changement du state pour que le formulaire d'ajout soit visible
+    const state_copy = { ...this.state };
+    state_copy.show_add_card = true;
+    this.setState(state_copy);
+
+  }
   handleClickCardMove = (col_index, card_index, direction) => {
     console.log('Dans handleClickRight ');
     console.log('col_index : ', col_index);
@@ -119,11 +150,15 @@ class Table extends Component {
     this.setState(state_copy, () => { this.updateCard(card) });
 
   }
-  updateCard = async (card, themeid, columnid) => {
+  updateCard = async (card) => {
     try {
       console.log('Dans updateCard - carte bougée : ', card);
-      console.log('Rubrique en cours : ', this.state.term_selected);
-      await this.coop.updateCard(this.state.user, this.token, card, this.state.term_selected.id, card.column);
+      await this.coop.updateCard(
+        this.state.user, 
+        this.token, 
+        card, 
+        this.state.term_selected.id, 
+        card.colonne);
     }
     catch (error) {
       console.log('Erreur attrapée dans updateCard: ', error);
@@ -156,6 +191,7 @@ class Table extends Component {
 
     state_copy.columns = columns;
     state_copy.term_selected = term;
+    state_copy.error = null;
     this.setState(state_copy);
 
   }
@@ -217,6 +253,7 @@ class Table extends Component {
                     elt => <li
                       onClick={() => { this.handleClickTerm(elt) }}
                       className={`btn m-2 ${this.renderClassNameTerm(elt)}`}
+                      id={elt.id}
                       key={elt.id}>
                       {elt.name}
                     </li>
@@ -246,10 +283,12 @@ class Table extends Component {
           </section>
           <section className="row">
             {this.state.columns.map((col, index) =>
-              <Column key={col.id}
+              <Column 
+                key={col.id}
                 col_name={col.name}
                 cards={col.cartes}
                 onClickCardMove={this.handleClickCardMove}
+                onClickButtonAddCard={this.handleClickButtonAddCard}
                 col_index={index}
               />)}
           </section>
@@ -258,6 +297,11 @@ class Table extends Component {
         <footer className="container-fluid">
           Footer ici
         </footer>
+        {this.state.show_add_card && (
+          <AddCard 
+            onSubmitAddCard={this.handleSubmitAddCard}
+          />
+        )}
       </div>
     );
   }

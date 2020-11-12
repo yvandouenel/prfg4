@@ -10,6 +10,7 @@ export default class Coopernet {
         } else return response.text(); // renvoie une promesse
       })
       .then(function (data) { // data correspond au retour du résolve (ici deux lignes au dessus)
+        //data = data.split(" ")[0];
         return data;
       });
   }
@@ -114,6 +115,12 @@ export default class Coopernet {
     columnid
   ) => {
     console.log("Dans updateCard de coopernet");
+    console.log('user :', user);
+    console.log('token :', token);
+    console.log('card :', card);
+    console.log('themeid :', themeid);
+    console.log('columnid :', columnid);
+
     // création de la requête avec fetch
     return fetch(this.url + "/node/" + card.id + "?_format=hal_json", {
       // permet d'accepter les cookies ?
@@ -127,7 +134,7 @@ export default class Coopernet {
       body: JSON.stringify({
         _links: {
           type: {
-            href: this.url_server + "rest/type/node/carte"
+            href: this.url + "/rest/type/node/carte"
           }
         },
         title: [
