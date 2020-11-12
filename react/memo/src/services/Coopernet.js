@@ -76,7 +76,7 @@ export default class Coopernet {
       })
       .catch(error => { console.error("Erreur attrapée dans getTerms", error); });
   };
-  getCards = (user, token, term_number  ) => {
+  getCards = (user, token, term_number) => {
     return fetch(this.url +
       "/memo/list_cartes_term/" +
       user.userid +
@@ -107,9 +107,11 @@ export default class Coopernet {
     .catch(error => { console.error("Erreur attrapée dans getTerms", error); });;
   }
   updateCard = (
+    user,
+    token,
     card,
     themeid,
-    columnid,
+    columnid
   ) => {
     console.log("Dans updateCard de coopernet");
     // création de la requête avec fetch
@@ -119,8 +121,8 @@ export default class Coopernet {
       method: "PATCH",
       headers: {
         "Content-Type": "application/hal+json",
-        "X-CSRF-Token": this.token,
-        Authorization: "Basic " + btoa(this.user.uname + ":" + this.user.upwd) // btoa = encodage en base 64
+        "X-CSRF-Token": token,
+        Authorization: "Basic " + btoa(user.userid + ":" + user.userpwd) // btoa = encodage en base 64
       },
       body: JSON.stringify({
         _links: {

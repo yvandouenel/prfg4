@@ -60,6 +60,11 @@ class Table extends Component {
       // -- On modifie la copie du state 
       // -- Enfin, on compare avec la méthode setState et s'il y a une différence entre la copie et le state, alors Render est automatiquement appelée
       const state_copy = { ...this.state.terms };
+      // Ajout de la propriété "selected" à chaque term
+      for(let term of terms) {
+        term.selected = false;
+      }
+
       state_copy.terms = terms;
       state_copy.error = null;
       this.setState(state_copy);
@@ -121,6 +126,15 @@ class Table extends Component {
     // - Modifier la copie du state (ici columns)
     // - Comparer le state copié et le state encours via setState(copie-du-state)
     const state_copy = { ...this.state };
+    // On remet toutes les propriétés selected des termes à faux
+    for(let term of state_copy.terms) {
+      term.selected = false;
+    }
+    // Changement de la propriété selected sur le term cliqué
+    const index_term_selected = state_copy.terms.indexOf(term);
+    console.log('Index du term sélectionné : ', index_term_selected);
+    state_copy.terms[index_term_selected].selected = true;
+
     state_copy.columns = columns;
     state_copy.term_selected = term.name;
     this.setState(state_copy);
@@ -153,6 +167,10 @@ class Table extends Component {
     this.setState(state_original);
 
   }
+  renderClassNameTerm = (term) => {
+    const class_term = (term.selected) ? "btn-success" : "btn-warning";
+    return class_term;
+  }
   render() {
     return (
       <div>
@@ -179,7 +197,7 @@ class Table extends Component {
                   this.state.terms.map(
                     elt => <li
                       onClick={() => { this.handleClickTerm(elt) }}
-                      className="btn btn-warning m-2"
+                      className={`btn m-2 ${this.renderClassNameTerm(elt)}`}
                       key={elt.id}>
                       {elt.name}
                     </li>
