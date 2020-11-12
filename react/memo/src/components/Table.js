@@ -90,14 +90,14 @@ class Table extends Component {
     // - Modifier la copie du state (ici columns)
     // - Comparer le state copié et le state encours via setState(copie-du-state)
     const state_copy = { ...this.state };
-
+    let card = null;
     if (direction === "right") {
       // calcul de la colonne de droite via "%" qui est l'opérateur du reste de la division euclidienne
       const next_col = ((col_index + 1) % 4);
       console.log('Next col : ', next_col);
       // on ajoute la carte cliquée dans la prochaine colonne
       state_copy.columns[next_col].cartes.push(state_copy.columns[col_index].cartes[card_index]);
-
+      card = state_copy.columns[next_col].cartes[state_copy.columns[next_col].cartes.length -1];
       // on supprime la carte cliquée du state copié
       state_copy.columns[col_index].cartes.splice(card_index, 1);
     } else {
@@ -107,13 +107,18 @@ class Table extends Component {
       console.log('Previous col : ', previous_col);
       // on ajoute la carte cliquée dans la colonne précédente
       state_copy.columns[previous_col].cartes.push(state_copy.columns[col_index].cartes[card_index]);
+      card = state_copy.columns[previous_col].cartes[state_copy.columns[previous_col].cartes.length -1];
       // on supprime la carte cliquée du state copié
       state_copy.columns[col_index].cartes.splice(card_index, 1);
     }
 
     // on compare le state actuel au state copié
-    this.setState(state_copy);
+    this.setState(state_copy, () => {this.updateCard(card)});
 
+  }
+  updateCard = (card, themeid, columnid) => {
+    console.log('Dans updateCard - carte bougée : ', card);
+    //this.coop.updateCard(this.user,this.token, card, themeid,columnid);
   }
   handleClickTerm = async term => {
     console.log('Dans handleClickTerm - id du terme cliqué : ', term.id);

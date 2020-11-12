@@ -115,7 +115,7 @@ export default class Coopernet {
   ) => {
     console.log("Dans updateCard de coopernet");
     // création de la requête avec fetch
-    fetch(this.url + "node/" + card.id + "?_format=hal_json", {
+    fetch(this.url + "/node/" + card.id + "?_format=hal_json", {
       // permet d'accepter les cookies ?
       credentials: "same-origin",
       method: "PATCH",
