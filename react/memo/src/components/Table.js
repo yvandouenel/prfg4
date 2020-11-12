@@ -98,6 +98,7 @@ class Table extends Component {
       // on ajoute la carte cliquée dans la prochaine colonne
       state_copy.columns[next_col].cartes.push(state_copy.columns[col_index].cartes[card_index]);
       card = state_copy.columns[next_col].cartes[state_copy.columns[next_col].cartes.length -1];
+      card.colonne = state_copy.columns[next_col].id;
       // on supprime la carte cliquée du state copié
       state_copy.columns[col_index].cartes.splice(card_index, 1);
     } else {
@@ -108,17 +109,20 @@ class Table extends Component {
       // on ajoute la carte cliquée dans la colonne précédente
       state_copy.columns[previous_col].cartes.push(state_copy.columns[col_index].cartes[card_index]);
       card = state_copy.columns[previous_col].cartes[state_copy.columns[previous_col].cartes.length -1];
+      card.colonne = state_copy.columns[previous_col].id;
       // on supprime la carte cliquée du state copié
       state_copy.columns[col_index].cartes.splice(card_index, 1);
     }
 
     // on compare le state actuel au state copié
-    this.setState(state_copy, () => {this.updateCard(card)});
+    // ensuite on appelle updateCard
+    this.setState(state_copy, () => {this.updateCard(card )});
 
   }
   updateCard = (card, themeid, columnid) => {
     console.log('Dans updateCard - carte bougée : ', card);
-    //this.coop.updateCard(this.user,this.token, card, themeid,columnid);
+    /* console.log('Rubrique en cours : ', this.state.term_selected.id);
+    this.coop.updateCard(this.state.user,this.token, card, this.state.term_selected.id, card.column); */
   }
   handleClickTerm = async term => {
     console.log('Dans handleClickTerm - id du terme cliqué : ', term.id);
@@ -141,7 +145,7 @@ class Table extends Component {
     state_copy.terms[index_term_selected].selected = true;
 
     state_copy.columns = columns;
-    state_copy.term_selected = term.name;
+    state_copy.term_selected = {name: term.name, id: term.id};
     this.setState(state_copy);
 
   }
@@ -209,7 +213,10 @@ class Table extends Component {
                   )}
               </ul>
             </nav>
-            <h2>{this.state.term_selected}</h2>
+            {this.state.term_selected && (
+              <h2>{this.state.term_selected.name}</h2>
+            )}
+            
           </div>
 
         </header>
