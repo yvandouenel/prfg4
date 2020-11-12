@@ -121,8 +121,8 @@ class Table extends Component {
   }
   updateCard = (card, themeid, columnid) => {
     console.log('Dans updateCard - carte bougée : ', card);
-    /* console.log('Rubrique en cours : ', this.state.term_selected.id);
-    this.coop.updateCard(this.state.user,this.token, card, this.state.term_selected.id, card.column); */
+    console.log('Rubrique en cours : ', this.state.term_selected);
+    this.coop.updateCard(this.state.user, this.token, card, this.state.term_selected.id, card.column);
   }
   handleClickTerm = async term => {
     console.log('Dans handleClickTerm - id du terme cliqué : ', term.id);
@@ -145,7 +145,7 @@ class Table extends Component {
     state_copy.terms[index_term_selected].selected = true;
 
     state_copy.columns = columns;
-    state_copy.term_selected = {name: term.name, id: term.id};
+    state_copy.term_selected = term;
     this.setState(state_copy);
 
   }
