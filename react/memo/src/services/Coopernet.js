@@ -190,12 +190,12 @@ export default class Coopernet {
     user,
     token,
     card,
-    themeid
+    term_id
   ) => {
     console.log("Dans createReqAddCards de coopernet");
     // création de la requête
     // utilisation de fetch
-    fetch(this.url + "/node?_format=hal_json", {
+    return fetch(this.url + "/node?_format=hal_json", {
       // permet d'accepter les cookies ?
       credentials: "same-origin",
       method: "POST",
@@ -238,8 +238,8 @@ export default class Coopernet {
         ],
         field_carte_thematique: [
           {
-            target_id: themeid,
-            url: "/taxonomy/term/" + themeid
+            target_id: term_id,
+            url: "/taxonomy/term/" + term_id
           }
         ],
         type: [
@@ -251,9 +251,9 @@ export default class Coopernet {
     })
       .then(response => response.json())
       .then(data => {
-        console.log("data reçues dans createReqAddCards: ", data);
+        console.log("data reçues dans addCard: ", data);
         if (data.hasOwnProperty("created") && data.created[0].value) {
-          return [themeid,card.id];
+          return data.nid[0].value; // retourne la nouvelle id de la carte
         } else {
           throw new Error("Problème de donnée dans addCard : ", data);
         }

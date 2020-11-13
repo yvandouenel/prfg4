@@ -107,17 +107,34 @@ class Table extends Component {
     if (question && answer) {
       // On va modifier l'interface via le processus habituel
       const state_copy = { ...this.state };
-      state_copy.columns[column.col_index].cartes.push(
-        {
-          id: "tmp_" + (Math.random() * 1000),
-          colonne: column.col_id,
-          explication: explanation,
-          question: question,
-          reponse: answer
-        });
+      const new_card = {
+        id: "tmp_" + (Math.random() * 1000),
+        colonne: column.col_id,
+        explication: explanation,
+        question: question,
+        reponse: answer
+      }
+      const card_index = (state_copy.columns[column.col_index].cartes.push(new_card)) -1;
         state_copy.show_add_card = null;
-      this.setState(state_copy);
+        // Appel de la méthode qui va enregistrer la nouvelle carte
+        console.log('Term_id: ', this.state.term_selected);
+        console.log('Card : ', new_card);
+      this.setState(state_copy, () => { this.addCard(new_card, column.col_index, card_index)});
     }
+  }
+  addCard = async (new_card, col_index, card_index) => {
+    console.log('Dans addCard');
+    const card_database_id = await this.coop.addCard(this.state.user, 
+      this.token, 
+      new_card, 
+      this.state.term_selected.id
+      );
+    console.log('Id de la nouvelle carte dans la base de donnée : ', card_database_id);
+
+    // Modification du state afin que la nouvelle carte ait bien l'id provenant de la BD
+    const state_copy = { ...this.state};
+    state_copy.columns[col_index].cartes[card_index].id = card_database_id;
+    this.setState(state_copy);
   }
   handleClickButtonAddCard = (col_id, col_index) => {
     console.log('Dans handleClickButtonAddCard');
@@ -165,6 +182,9 @@ class Table extends Component {
 
     // on compare le state actuel au state copié
     // ensuite on appelle updateCard
+    // la méthode setState attend en premier paramètre un objet comparable au this.state
+    // et elle attend en deuxième paramètre une fonction (callback) qui sera appelée
+    // après le changement de state et donc de render
     this.setState(state_copy, () => { this.updateCard(card) });
 
   }
