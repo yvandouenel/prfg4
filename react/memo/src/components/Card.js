@@ -4,7 +4,7 @@
  */
 function Card(props) {
   return (
-    <article className="bg-secondary p-3 text-white mb-3 rounded d-flex">
+    <article className="bg-secondary p-3 text-white mb-3 rounded d-flex justify-content-between">
       <button
       onClick={() => {props.onClickCardMove(props.col_index, props.card_index, "left")}} 
       className="btn btn-warning mr-2">&#60;

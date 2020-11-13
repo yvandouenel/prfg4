@@ -186,4 +186,75 @@ export default class Coopernet {
         }
       });
   };
+  addCard = (
+    card,
+    themeid
+  ) => {
+    console.log("Dans createReqAddCards de coopernet");
+    // création de la requête
+    // utilisation de fetch
+    fetch(this.url + "/node?_format=hal_json", {
+      // permet d'accepter les cookies ?
+      credentials: "same-origin",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/hal+json",
+        "X-CSRF-Token": this.token,
+        Authorization: "Basic " + btoa(user.userlogin + ":" + user.userpwd) // btoa = encodage en base 64
+      },
+      body: JSON.stringify({
+        _links: {
+          type: {
+            href: this.url + "/rest/type/node/carte"
+          }
+        },
+        title: [
+          {
+            value: card.question
+          }
+        ],
+        field_carte_question: [
+          {
+            value: card.question
+          }
+        ],
+        field_carte_reponse: [
+          {
+            value: card.reponse
+          }
+        ],
+        field_carte_explication: [
+          {
+            value: card.explication
+          }
+        ],
+        field_carte_colonne: [
+          {
+            target_id: card.colonne,
+            url: "/taxonomy/term/" + card.colonnne
+          }
+        ],
+        field_carte_thematique: [
+          {
+            target_id: themeid,
+            url: "/taxonomy/term/" + themeid
+          }
+        ],
+        type: [
+          {
+            target_id: "carte"
+          }
+        ]
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log("data reçues dans createReqAddCards: ", data);
+        if (data.hasOwnProperty("created") && data.created[0].value) {
+          return [themeid,card.id];
+        } else {
+          throw new Error("Problème de donnée dans addCard : ", data);
+        }
+      });
+  };
 }
