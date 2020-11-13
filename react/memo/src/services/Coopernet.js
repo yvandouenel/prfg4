@@ -1,6 +1,8 @@
 export default class Coopernet {
   constructor(url) {
     this.url = url;
+    this.user = null;
+    this.token = "";
   }
   getToken = () => {
     return fetch(`${this.url}/rest/session/token/`)
@@ -9,21 +11,22 @@ export default class Coopernet {
           throw new Error("Le serveur n'a pas répondu correctement");
         } else return response.text(); // renvoie une promesse
       })
-      .then(function (data) { // data correspond au retour du résolve (ici deux lignes au dessus)
-        //data = data.split(" ")[0];
-        return data;
+      .then((data) => { // data correspond au retour du résolve (ici deux lignes au dessus)
+        
+        this.token = data;
+        console.log('token dans coopernet : ', this.token);
       });
   }
 
-  getUser = (login, pwd, token) => {
-    console.log("dans getUser");
+  getUser = (login, pwd) => {
+    console.log("dans getUser de Coopernet");
     // utilisation de fetch
     return fetch(`${this.url}/user/login?_format=json`, {
       credentials: "same-origin",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-CSRF-Token": token
+        "X-CSRF-Token": this.token
       },
       body: JSON.stringify({
         name: login,
@@ -37,12 +40,14 @@ export default class Coopernet {
           
           throw new Error("Erreur de data : ", data);
         } else {
-          //console.log("user", data.current_user);
-          return {
+          console.log("user dans getUser de coopernet", data.current_user);
+          this.user = {
             userid: data.current_user.uid,
             userlogin: login,
             userpwd: pwd
           }
+          console.log('this.user dans getUser de coopernet :', this.user);
+          return this.user;
 
         }
       })
@@ -50,17 +55,17 @@ export default class Coopernet {
 
   };
 
-  getTerms = (user, token) => {
+  getTerms = () => {
     // création de la requête
     console.log("Dans getTerms");
     return fetch(`${this.url}/memo/themes/` +
-      user.userid, {
+      this.user.userid, {
       credentials: "same-origin",
       method: "GET",
       headers: {
         "Content-Type": "application/hal+json",
-        "X-CSRF-Token": token,
-        "Authorization": "Basic " + btoa(user.userid + ":" + user.userpwd) // btoa = encodage en base 64
+        "X-CSRF-Token": this.token,
+        "Authorization": "Basic " + btoa(this.user.userid + ":" + this.user.userpwd) // btoa = encodage en base 64
       }
     })
       .then(response => {
@@ -77,10 +82,10 @@ export default class Coopernet {
       })
       .catch(error => { console.error("Erreur attrapée dans getTerms", error); });
   };
-  getCards = (user, token, term_number) => {
+  getCards = (term_number) => {
     return fetch(this.url +
       "/memo/list_cartes_term/" +
-      user.userid +
+      this.user.userid +
       "/" +
       term_number +
       "&_format=json&time=" +
@@ -89,8 +94,8 @@ export default class Coopernet {
       method: "GET",
       headers: {
         "Content-Type": "application/hal+json",
-        "X-CSRF-Token": token,
-        "Authorization": "Basic " + btoa(user.userid + ":" + user.userpwd) // btoa = encodage en base 64
+        "X-CSRF-Token": this.token,
+        "Authorization": "Basic " + btoa(this.user.userid + ":" + this.user.userpwd) // btoa = encodage en base 64
       }
     })
     .then(response => {
@@ -108,8 +113,6 @@ export default class Coopernet {
     .catch(error => { console.error("Erreur attrapée dans getTerms", error); });;
   }
   updateCard = (
-    user,
-    token,
     card,
     themeid,
     columnid
@@ -123,8 +126,8 @@ export default class Coopernet {
       method: "PATCH",
       headers: {
         "Content-Type": "application/hal+json",
-        "X-CSRF-Token": token,
-        Authorization: "Basic " + btoa(user.userlogin + ":" + user.userpwd) // btoa = encodage en base 64
+        "X-CSRF-Token": this.token,
+        Authorization: "Basic " + btoa(this.user.userlogin + ":" + this.user.userpwd) // btoa = encodage en base 64
       },
       body: JSON.stringify({
         _links: {
@@ -186,9 +189,18 @@ export default class Coopernet {
         }
       });
   };
+  /**
+   * Permet d'enregistrer une nouvelle carte en base de données
+   * Si la promesse est résolue (resolve) et que le serveur renvoie
+   * bien les informations concernant la nouvelle carte, la méthode renvoie 
+   * le numéro identifiant de la carte en base de données
+   * @param {object} user 
+   * @param {string} token 
+   * @param {object} card 
+   * @param {number} term_id 
+   * @returns {Promise} la promesse est automatiquement générée par Fetch
+   */
   addCard = (
-    user,
-    token,
     card,
     term_id
   ) => {
@@ -201,8 +213,8 @@ export default class Coopernet {
       method: "POST",
       headers: {
         "Content-Type": "application/hal+json",
-        "X-CSRF-Token": token,
-        Authorization: "Basic " + btoa(user.userlogin + ":" + user.userpwd) // btoa = encodage en base 64
+        "X-CSRF-Token": this.token,
+        Authorization: "Basic " + btoa(this.user.userlogin + ":" + this.user.userpwd) // btoa = encodage en base 64
       },
       body: JSON.stringify({
         _links: {
