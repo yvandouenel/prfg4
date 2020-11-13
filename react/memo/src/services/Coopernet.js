@@ -1,23 +1,42 @@
+/**
+ * La classe Coopernet sert à tout ce qui concerne la communication
+ * avec les points d'entrée du serveur d'API Rest coopernet
+ */
 export default class Coopernet {
-  constructor(url) {
-    this.url = url;
+  /**
+   * Le constructeur permet d'initialiser les 3 propriétés : url, user et token
+   */
+  constructor() {
+    this.url = "https://www.coopernet.fr";
     this.user = null;
     this.token = "";
   }
+  /**
+   * 
+   * @return {Promise} En cas d'échec, l'erreur serat "catchée" au niveau de l'appel
+   * de la méthode (Table) pour afficher l'erreur dans l'interface
+   */
   getToken = () => {
     return fetch(`${this.url}/rest/session/token/`)
       .then(function (response) {
         if (response.status !== 200) { // si ça c'est mal passé
-          throw new Error("Le serveur n'a pas répondu correctement");
-        } else return response.text(); // renvoie une promesse
+          throw new Error("Obtention du token : Le serveur n'a pas répondu correctement");
+        } else return response.text(); // renvoie une promesse qui vérifie si c'est bien du texte
       })
       .then((data) => { // data correspond au retour du résolve (ici deux lignes au dessus)
-        
         this.token = data;
         console.log('token dans coopernet : ', this.token);
       });
   }
-
+  /**
+   * Récupère l'utilisateur et stocke le résultat dans this.user
+   * L'erreur est "attrapée" dans Coopernet mais également dans
+   * Table pour l'afficher dans l'interface (via setState)
+   * @param {string} login 
+   * @param {string} pwd 
+   * 
+   * @returns {Promise} la promesse est automatiquement générée par Fetch
+   */
   getUser = (login, pwd) => {
     console.log("dans getUser de Coopernet");
     // utilisation de fetch
@@ -33,12 +52,11 @@ export default class Coopernet {
         pass: pwd
       })
     })
-      .then(response => response.json())
+      .then(response => response.json()) // teste si la réponse est bien du json
       .then(data => {
         //console.log("success", data);
-        if (data.current_user === undefined) {
-          
-          throw new Error("Erreur de data : ", data);
+        if (data.current_user === undefined) { // teste si le serveur a bien identifié l'utilisateur
+          throw new Error("Erreur identification user : ", data);
         } else {
           console.log("user dans getUser de coopernet", data.current_user);
           this.user = {
@@ -46,15 +64,19 @@ export default class Coopernet {
             userlogin: login,
             userpwd: pwd
           }
-          console.log('this.user dans getUser de coopernet :', this.user);
           return this.user;
-
         }
       })
       .catch(error => { console.error("Erreur attrapée dans getUser de Coopernet", error) });
 
   };
-
+  /**
+   * Récupère les termes (rubriques) liées à un utilisateur
+   * L'erreur est "attrapée" dans Coopernet mais également dans
+   * Table pour l'afficher dans l'interface (via setState)
+   * 
+   * @returns {Promise} la promesse est automatiquement générée par Fetch
+   */
   getTerms = () => {
     // création de la requête
     console.log("Dans getTerms");
@@ -82,6 +104,13 @@ export default class Coopernet {
       })
       .catch(error => { console.error("Erreur attrapée dans getTerms", error); });
   };
+  /**
+   * Récupère les colonnes et les cartes associées qui correspondent au 
+   * term (rubrique) cliqué par l'utilisateur
+   * @param {number} term_number 
+   * 
+   * @returns {Promise} la promesse est automatiquement générée par Fetch
+   */
   getCards = (term_number) => {
     return fetch(this.url +
       "/memo/list_cartes_term/" +
@@ -98,27 +127,30 @@ export default class Coopernet {
         "Authorization": "Basic " + btoa(this.user.userid + ":" + this.user.userpwd) // btoa = encodage en base 64
       }
     })
-    .then(response => {
-      if (response.status === 200) return response.json(); // vérifie que le format json est respecté
-      else throw new Error("Problème de réponse ", response);
-    })
-    .then(data => {
-      console.log("data reçues dans getTerms :", data);
-      if (data) {
-        return data;
-      } else {
-        throw new Error("Problème de data ", data);
-      }
-    })
-    .catch(error => { console.error("Erreur attrapée dans getTerms", error); });;
+      .then(response => {
+        if (response.status === 200) return response.json(); // vérifie que le format json est respecté
+        else throw new Error("Problème de réponse ", response);
+      })
+      .then(data => {
+        console.log("data reçues dans getTerms :", data);
+        if (data) {
+          return data;
+        } else {
+          throw new Error("Problème de data ", data);
+        }
+      })
+      .catch(error => { console.error("Erreur attrapée dans getTerms", error); });;
   }
-  updateCard = (
-    card,
-    themeid,
-    columnid
-  ) => {
+  /**
+   * 
+   * @param {object} card 
+   * @param {number} themeid 
+   * @param {number} columnid 
+   * @returns {Promise} la promesse est automatiquement générée par Fetch
+   */
+  updateCard = (card, themeid, columnid) => {
     console.log("Dans updateCard de coopernet");
-    
+
     // création de la requête avec fetch
     return fetch(this.url + "/node/" + card.id + "?_format=hal_json", {
       // permet d'accepter les cookies ?
@@ -176,12 +208,12 @@ export default class Coopernet {
     })
       .then(response => {
         console.log('statut de la réponse ', response.status);
-        if(response.status == 403) throw new Error("Problème pour enregistrer la carte")
+        if (response.status == 403) throw new Error("Problème pour enregistrer la carte")
         return response.json();
       })
       .then(data => {
         console.log("data reçues :", data);
-       
+
         if (data) {
           return data;
         } else {

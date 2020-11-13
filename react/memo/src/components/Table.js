@@ -8,7 +8,7 @@ import AddCard from './AddCard';
 class Table extends Component {
   constructor() {
     super();
-    this.coop = new Coopernet("https://www.coopernet.fr");
+    this.coop = new Coopernet();
     //this.coop = new Coopernet("http://local.coopernet.my");
     this.user = this.coop.user;
 
