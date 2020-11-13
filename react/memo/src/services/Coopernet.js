@@ -187,6 +187,8 @@ export default class Coopernet {
       });
   };
   addCard = (
+    user,
+    token,
     card,
     themeid
   ) => {
@@ -199,7 +201,7 @@ export default class Coopernet {
       method: "POST",
       headers: {
         "Content-Type": "application/hal+json",
-        "X-CSRF-Token": this.token,
+        "X-CSRF-Token": token,
         Authorization: "Basic " + btoa(user.userlogin + ":" + user.userpwd) // btoa = encodage en base 64
       },
       body: JSON.stringify({
