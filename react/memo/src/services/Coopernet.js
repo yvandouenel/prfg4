@@ -115,12 +115,7 @@ export default class Coopernet {
     columnid
   ) => {
     console.log("Dans updateCard de coopernet");
-    console.log('user :', user);
-    console.log('token :', token);
-    console.log('card :', card);
-    console.log('themeid :', themeid);
-    console.log('columnid :', columnid);
-
+    
     // création de la requête avec fetch
     return fetch(this.url + "/node/" + card.id + "?_format=hal_json", {
       // permet d'accepter les cookies ?
@@ -129,7 +124,7 @@ export default class Coopernet {
       headers: {
         "Content-Type": "application/hal+json",
         "X-CSRF-Token": token,
-        Authorization: "Basic " + btoa(user.userid + ":" + user.userpwd) // btoa = encodage en base 64
+        Authorization: "Basic " + btoa(user.userlogin + ":" + user.userpwd) // btoa = encodage en base 64
       },
       body: JSON.stringify({
         _links: {
@@ -187,7 +182,7 @@ export default class Coopernet {
         if (data) {
           return data;
         } else {
-          throw new Error("Problème de donnée", data);
+          throw new Error("Problème dans updateCard", data);
         }
       });
   };

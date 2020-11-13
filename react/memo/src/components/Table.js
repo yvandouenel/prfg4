@@ -82,10 +82,19 @@ class Table extends Component {
       this.setState(state);
     }
   }
+  /**
+   * Gestionnaire d'événement de soumission du formulaire d'ajout de carte
+   * Si la question et la réponse sont renseignées, on crée une carte que l'on 
+   * va ajouter dans l'interface (via setState)
+   * @param {Event} event 
+   * @param {Object} column - l'objet va permettre de récupérer l'id et l'index de la colonne
+   * 
+   * @return void
+   */
   handleSubmitAddCard = (event, column) => {
     console.log('Dans handleSubmitAddCard');
     event.preventDefault();
-    console.log('Info sur la colonne (index et id ) :', column);
+    console.log('Info sur la colonne (index et id ) :', this.show);
 
     // Récupération des inputs du formulaire
     // event.target représente ici le formulaire
@@ -162,12 +171,13 @@ class Table extends Component {
   updateCard = async (card) => {
     try {
       console.log('Dans updateCard - carte bougée : ', card);
-      await this.coop.updateCard(
+      const resp = await this.coop.updateCard(
         this.state.user,
         this.token,
         card,
         this.state.term_selected.id,
         card.colonne);
+        console.log('Réponse dans updateCard : ', resp);
     }
     catch (error) {
       console.log('Erreur attrapée dans updateCard: ', error);
